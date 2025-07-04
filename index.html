@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Decomposer</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
+    <style>
+      :root {
+        /* Material Design 3 Color Palette */
+        --md-sys-color-primary: #6750a4;
+        --md-sys-color-on-primary: #ffffff;
+        --md-sys-color-primary-container: #eaddff;
+        --md-sys-color-on-primary-container: #21005d;
+        --md-sys-color-secondary: #625b71;
+        --md-sys-color-on-secondary: #ffffff;
+        --md-sys-color-secondary-container: #e8def8;
+        --md-sys-color-on-secondary-container: #1d192b;
+        --md-sys-color-surface: #fffbfe;
+        --md-sys-color-surface-variant: #e7e0ec;
+        --md-sys-color-on-surface: #1c1b1f;
+        --md-sys-color-outline: #79747e;
+        --md-sys-color-shadow: #000000;
+
+        --md-sys-color-error: #b3261e;
+        --md-sys-color-on-error: #ffffff;
+
+        /* Elevation shadows */
+        --md-elevation-1:
+          0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        --md-elevation-2:
+          0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        --md-elevation-3:
+          0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+        /* Border radius */
+        --md-shape-medium: 12px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        line-height: 1.6;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        padding: 40px 0;
+      }
+
+      header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--md-sys-color-primary);
+        margin-bottom: 10px;
+      }
+
+      header p {
+        font-size: 1.2rem;
+        color: var(--md-sys-color-secondary);
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      .app-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      @media (min-width: 900px) {
+        .app-container {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .card {
+        background-color: var(--md-sys-color-surface);
+        border-radius: var(--md-shape-medium);
+        box-shadow: var(--md-elevation-2);
+        overflow: hidden;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: var(--md-elevation-3);
+        transform: translateY(-5px);
+      }
+
+      .card-header {
+        background-color: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+        padding: 20px;
+        font-weight: 500;
+        font-size: 1.2rem;
+      }
+
+      .card-content {
+        padding: 25px;
+      }
+
+      .input-section textarea {
+        width: 100%;
+        height: 300px;
+        padding: 15px;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 8px;
+        font-family: monospace;
+        resize: vertical;
+        background-color: var(--md-sys-color-surface-variant);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .file-upload {
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 24px;
+        background-color: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+        border: none;
+        border-radius: 100px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+          background-color 0.3s,
+          box-shadow 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 5px;
+      }
+
+      .btn:hover {
+        background-color: #5a4790;
+        box-shadow: var(--md-elevation-1);
+      }
+
+      .btn-secondary {
+        background-color: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+      }
+
+      .btn-secondary:hover {
+        background-color: #d0c4e4;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      .output-section {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .output-item {
+        background-color: var(--md-sys-color-surface-variant);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .output-header {
+        background-color: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+        padding: 12px 20px;
+        font-weight: 500;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .output-content {
+        padding: 15px;
+        max-height: 200px;
+        overflow-y: auto;
+        font-family: monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        background-color: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        background-color: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+        border-radius: 8px;
+        box-shadow: var(--md-elevation-2);
+        transform: translateX(150%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+      }
+
+      .notification.show {
+        transform: translateX(0);
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--md-sys-color-outline);
+      }
+
+      .tab {
+        padding: 12px 24px;
+        cursor: pointer;
+        position: relative;
+        font-weight: 500;
+      }
+
+      .tab.active {
+        color: var(--md-sys-color-primary);
+      }
+
+      .tab.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: var(--md-sys-color-primary);
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .instructions {
+        background-color: var(--md-sys-color-surface-variant);
+        border-radius: var(--md-shape-medium);
+        padding: 25px;
+        margin-top: 30px;
+        box-shadow: var(--md-elevation-1);
+      }
+
+      .instructions h2 {
+        color: var(--md-sys-color-primary);
+        margin-bottom: 15px;
+      }
+
+      .instructions ol {
+        padding-left: 20px;
+      }
+
+      .instructions li {
+        margin-bottom: 10px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 30px 0;
+        color: var(--md-sys-color-secondary);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>HTML Decomposer</h1>
+        <p>
+          Split your HTML files with embedded JavaScript and CSS into separate,
+          clean files
+        </p>
+      </header>
+
+      <div class="app-container">
+        <div class="card">
+          <div class="card-header">Input HTML</div>
+          <div class="card-content">
+            <div class="tabs">
+              <div class="tab active" data-tab="text">Paste HTML</div>
+              <div class="tab" data-tab="file">Upload File</div>
+            </div>
+
+            <div class="tab-content active" id="text-tab">
+              <textarea
+                id="html-input"
+                placeholder="Paste your HTML code here..."
+              >
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to HTML Decomposer</h1>
+        <p>This is an example HTML file with embedded CSS and JavaScript.</p>
+        <button id="demo-btn">Click Me</button>
+    </div>
+
+    <script>
+        document.getElementById('demo-btn').addEventListener('click', function() {
+            alert('Button clicked! This is embedded JavaScript.');
+            document.body.style.backgroundColor = '#e3f2fd';
+        });
+    </script>
+</body>
+</html>
+                        </textarea
+              >
+            </div>
+
+            <div class="tab-content" id="file-tab">
+              <div class="file-upload">
+                <input type="file" id="file-input" accept=".html,.htm" />
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button id="decompose-btn" class="btn">Decompose HTML</button>
+              <button id="reset-btn" class="btn btn-secondary">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">Output</div>
+          <div class="card-content">
+            <div class="output-section">
+              <div class="output-item">
+                <div class="output-header">
+                  <span>HTML Output</span>
+                  <button
+                    class="btn btn-secondary download-btn"
+                    data-type="html"
+                  >
+                    Download
+                  </button>
+                </div>
+                <div class="output-content" id="html-output"></div>
+              </div>
+
+              <div class="output-item">
+                <div class="output-header">
+                  <span>CSS Output</span>
+                  <button
+                    class="btn btn-secondary download-btn"
+                    data-type="css"
+                  >
+                    Download
+                  </button>
+                </div>
+                <div class="output-content" id="css-output"></div>
+              </div>
+
+              <div class="output-item">
+                <div class="output-header">
+                  <span>JavaScript Output</span>
+                  <button class="btn btn-secondary download-btn" data-type="js">
+                    Download
+                  </button>
+                </div>
+                <div class="output-content" id="js-output"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="instructions">
+        <h2>How to Use HTML Decomposer</h2>
+        <ol>
+          <li>Paste your HTML code in the input area or upload an HTML file</li>
+          <li>
+            Click "Decompose HTML" to split your code into HTML, CSS, and
+            JavaScript
+          </li>
+          <li>Review the separated code in the output sections</li>
+          <li>Download each component as separate files</li>
+          <li>Use the reset button to clear all inputs and outputs</li>
+        </ol>
+      </div>
+
+      <footer>
+        <p>
+          HTML Decomposer &copy; 2023 | A Material Design 3 compliant tool for
+          splitting HTML files
+        </p>
+      </footer>
+    </div>
+
+    <div class="notification" id="notification">
+      File downloaded successfully!
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Tab switching
+        const tabs = document.querySelectorAll(".tab");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            // Remove active class from all tabs
+            tabs.forEach((t) => t.classList.remove("active"));
+            // Add active class to clicked tab
+            this.classList.add("active");
+
+            // Hide all tab content
+            document.querySelectorAll(".tab-content").forEach((tc) => {
+              tc.classList.remove("active");
+            });
+
+            // Show corresponding tab content
+            const tabId = this.getAttribute("data-tab");
+            document.getElementById(`${tabId}-tab`).classList.add("active");
+          });
+        });
+
+        // File upload handling
+        const fileInput = document.getElementById("file-input");
+        const htmlInput = document.getElementById("html-input");
+
+        fileInput.addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              htmlInput.value = event.target.result;
+              // Switch to text tab
+              tabs[0].click();
+            };
+            reader.readAsText(file);
+          }
+        });
+
+        // Decompose functionality
+        const decomposeBtn = document.getElementById("decompose-btn");
+        const resetBtn = document.getElementById("reset-btn");
+        const htmlOutput = document.getElementById("html-output");
+        const cssOutput = document.getElementById("css-output");
+        const jsOutput = document.getElementById("js-output");
+        const downloadBtns = document.querySelectorAll(".download-btn");
+        const notification = document.getElementById("notification");
+
+        decomposeBtn.addEventListener("click", function () {
+          const htmlContent = htmlInput.value;
+
+          if (!htmlContent.trim()) {
+            showNotification("Please enter HTML content first");
+            return;
+          }
+
+          // Create a temporary DOM element to parse the HTML
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(htmlContent, "text/html");
+
+          // Extract CSS from style tags and inline styles
+          const styles = Array.from(doc.querySelectorAll("style"));
+          let cssContent = "";
+
+          styles.forEach((style) => {
+            cssContent += style.textContent + "\n";
+            style.remove();
+          });
+
+          // Extract JavaScript from script tags
+          const scripts = Array.from(doc.querySelectorAll("script"));
+          let jsContent = "";
+
+          scripts.forEach((script) => {
+            if (!script.src) {
+              jsContent += script.textContent + "\n";
+            }
+            script.remove();
+          });
+
+          // Get the cleaned HTML
+          const cleanHTML = new XMLSerializer()
+            .serializeToString(doc)
+            .replace(/<html><head>/, "")
+            .replace(/<\/head><body>/, "")
+            .replace(/<\/body><\/html>/, "")
+            .trim();
+
+          // Display the results
+          htmlOutput.textContent = cleanHTML;
+          cssOutput.textContent = cssContent.trim() || "/* No CSS found */";
+          jsOutput.textContent = jsContent.trim() || "// No JavaScript found";
+
+          showNotification("HTML decomposed successfully!");
+        });
+
+        // Reset functionality
+        resetBtn.addEventListener("click", function () {
+          htmlInput.value = "";
+          htmlOutput.textContent = "";
+          cssOutput.textContent = "";
+          jsOutput.textContent = "";
+          fileInput.value = "";
+          showNotification("All inputs and outputs have been cleared");
+        });
+
+        // Download functionality
+        downloadBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const type = this.getAttribute("data-type");
+            let content, fileName, mimeType;
+
+            switch (type) {
+              case "html":
+                content = htmlOutput.textContent;
+                fileName = "output.html";
+                mimeType = "text/html";
+                break;
+              case "css":
+                content = cssOutput.textContent;
+                fileName = "styles.css";
+                mimeType = "text/css";
+                break;
+              case "js":
+                content = jsOutput.textContent;
+                fileName = "script.js";
+                mimeType = "text/javascript";
+                break;
+            }
+
+            if (!content.trim()) {
+              showNotification("No content to download");
+              return;
+            }
+
+            downloadFile(content, fileName, mimeType);
+            showNotification(`${fileName} downloaded successfully!`);
+          });
+        });
+
+        // Helper function to download files
+        function downloadFile(content, fileName, mimeType) {
+          const blob = new Blob([content], { type: mimeType });
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
+        }
+
+        // Helper function to show notifications
+        function showNotification(message) {
+          notification.textContent = message;
+          notification.classList.add("show");
+
+          setTimeout(() => {
+            notification.classList.remove("show");
+          }, 3000);
+        }
+      });
+    </script>
+  </body>
+</html>
