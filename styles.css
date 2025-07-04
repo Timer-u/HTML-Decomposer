@@ -58,10 +58,10 @@
   word-break: break-all;
 }
 
-/* 调整输出区域高度 */
+/* Styles for the output content area */
 .output-content {
   padding: 15px;
-  max-height: 300px; /* 增加高度以显示更多内容 */
+  max-height: 300px;
   overflow-y: auto;
   font-family: monospace;
   white-space: pre-wrap;
@@ -70,14 +70,14 @@
   color: var(--md-sys-color-on-surface);
 }
 
-/* 添加禁用状态 */
+/* Disabled state for buttons */
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   background-color: var(--md-sys-color-outline);
 }
 
-/* 优化文本区域 */
+/* Styling for textarea in the input section */
 .input-section textarea {
   width: 100%;
   height: 300px;
@@ -92,7 +92,7 @@
   line-height: 1.5;
 }
 
-/* 添加文件上传区域样式 */
+/* File upload area styling */
 .file-upload {
   margin-bottom: 20px;
   padding: 20px;
@@ -107,7 +107,7 @@
   margin-bottom: 10px;
 }
 
-/* 响应式优化 */
+/* Responsive layout adjustments */
 @media (max-width: 768px) {
   .app-container {
     grid-template-columns: 1fr;
